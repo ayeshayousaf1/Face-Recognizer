@@ -8,13 +8,12 @@ model = tf.keras.models.load_model('model.h5')
 
 # Function to preprocess the uploaded image
 def preprocess_image(image):
-    image = image.resize((150, 150))  # Resize to the input size expected by the model
-    image = np.array(image)  # Convert to a NumPy array
-    if image.shape[-1] == 4:  # If the image has an alpha channel, remove it (RGBA -> RGB)
-        image = image[..., :3]
-    image = image / 255.0  # Normalize pixel values
+    # Resize the image to a larger size, for example (224, 224) which is common in pre-trained models
+    image = image.resize((224, 224))  # or whatever size fits your model
+    image = np.array(image) / 255.0  # Normalize pixel values
     image = np.expand_dims(image, axis=0)  # Add batch dimension
     return image
+
 
 # Streamlit app
 st.title("Face Mask Detection")
@@ -30,6 +29,8 @@ if uploaded_file is not None:
 
         # Preprocess the image
         processed_image = preprocess_image(image)
+        print(processed_image.shape)  # Debugging the input shape before prediction
+
 
         # Predict the mask status
         prediction = model.predict(processed_image)
