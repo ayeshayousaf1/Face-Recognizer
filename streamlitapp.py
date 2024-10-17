@@ -5,7 +5,7 @@ from PIL import Image
 import cv2
 
 # Load the saved model
-model = tf.keras.models.load_model('saved_model/face_mask_detector_model')
+model = tf.keras.models.load_model('model.h5')
 
 # Class names
 class_names = ['With Mask', 'Without Mask']
