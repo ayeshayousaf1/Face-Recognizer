@@ -4,21 +4,20 @@ import numpy as np
 import tensorflow as tf
 
 # Load the trained model
-model = tf.keras.models.load_model('model.h5')
+model = tf.keras.models.load_model('face_mask_detection_model.h5')
 
 # Define a function to preprocess the uploaded image
 def preprocess_image(image):
-    # Resize the image to the correct size expected by the model
-    image = image.resize((224, 224))  # Adjust to model's expected input size
+    # Resize the image to the input size expected by the model (150x150 in this case)
+    image = image.resize((150, 150))  # Resize to 150x150
     image = np.array(image)  # Convert to NumPy array
-    if image.shape[-1] == 4:  # If the image has an alpha channel, remove it (RGBA -> RGB)
+    if image.shape[-1] == 4:  # Remove alpha channel if necessary (RGBA to RGB)
         image = image[..., :3]
     image = image / 255.0  # Normalize pixel values to [0, 1]
     
-    # Add batch dimension (make it shape: (1, 224, 224, 3))
+    # Add batch dimension (make it shape: (1, 150, 150, 3))
     img_array = np.expand_dims(image, axis=0)
     
-    print("Processed image shape:", img_array.shape)  # Debugging step
     return img_array
 
 # Streamlit app
@@ -52,3 +51,4 @@ if uploaded_file is not None:
         st.error(f"Error: {e}")
 else:
     st.write("Please upload an image to make a prediction.")
+
